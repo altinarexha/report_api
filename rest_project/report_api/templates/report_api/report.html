@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+{% load rest_framework %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<h2>Report </h2>
+ 
+        {% for task in object_list %}
+<p>
+     
+        - {{ task.content }} 
+   
+    </p>
+{% endfor %}
+
+ 
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+</body>
+</html>

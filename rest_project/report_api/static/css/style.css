@@ -1,0 +1,110 @@
+
+.box {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    width:60%;
+    box-shadow: 5px 5px 15px 5px rgba(36, 126, 59, 0.8);
+    background-color: rgb(238, 205, 161);
+    border-radius: 2%;
+    }
+.report{
+    text-decoration: none;
+    color:black;
+}
+a {
+    text-decoration: none;
+    border:2 px solid green;
+ }
+.inline{
+    display: inline-flex;
+}
+.inline button {
+    border: none;
+    background: none;
+    color: green;
+    font-size: large;
+}
+.inline input{
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+    padding: 10px 20px;
+
+}
+.inline input:focus {
+    border: 3px solid rgb(16, 78, 4);
+  }
+
+table{
+        width: 100%;
+        height:auto;
+}
+.flex-wrapper{
+    display: flex;
+    margin:20px;
+    margin-bottom: 30px;
+}
+.btn{
+    float:right;
+    border:2px solid white;
+}
+td{
+    border-bottom: 1px solid green;
+    padding:10px;
+}
+tr:hover .fa{
+    background-color: rgba(36, 126, 59, 0.8);
+    color:white
+}
+tr:hover .delete{
+    background-color: rgba(36, 126, 59, 0.8);
+    color:white
+}
+tr:hover .edit{
+    background-color: rgba(36, 126, 59, 0.8);
+    color:white
+}
+tr:hover{
+    background-color: rgba(36, 126, 59, 0.8);
+    color:white
+}
+body{
+   background-color: rgb(252, 252, 252);
+   margin:2%;
+font-family:monospace;
+font-size: large;
+}
+
+button{
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 2px;
+    color: black;
+    font-size: 16px;
+    margin: 4px 2px;
+    width:70px;
+    cursor: pointer;
+    text-align: center;
+    border:2px solid rgba(36, 126, 59, 0.8);
+    background-color: rgb(243, 224, 200);
+}
+.btn_right{
+    float:right;
+    text-decoration: none;
+
+}
+input{
+    padding: 10px;
+    border-radius: 2px;
+    text-decoration: none;
+}
+
+.fa{
+    text-decoration: none;
+    color:rgba(15, 117, 40, 0.8);
+
+}

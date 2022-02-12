@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+{% load static %}
+{% load rest_framework %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title> TaskList</title>
+  <style>
+    .tasklist{
+      position: -webkit-sticky;
+		  position: sticky;
+    }
+  </style>
+</head>
+<body>
+
+    <section class="box">
+
+      <button class="report"><a href="{% url 'report' %}">Report</a></button>
+
+          <div class="container">
+
+            <div id="task-container">
+              <div id="form-wrapper">
+                <form id="form">
+                  <div class="flex-wrapper">
+                    <div style="width:80%">
+                      <input id="task_content" class="form-control" type="text" name="title" placeholder="Add task">
+                    </div>
+                      <input id="submit" style="width:20%" class="btn" type="submit" >
+                    
+                  </div>
+                </form>
+              </div>
+
+              <table id="tasklist">
+              <!-- add the tasklist contetnt -->
+              </table>	
+
+            </div>
+
+          </div>
+
+    </section>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+<script>
+function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = cookies[i].trim();
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getCookie('csrftoken');
+
+
+		var activeItem = null
+
+		buildList()
+    //get data in tasklist
+		function buildList(){
+			var wrapper = document.getElementById('tasklist')
+      wrapper.innerHTML=''
+			var url = 'http://127.0.0.1:8000/task-list/'
+
+			fetch(url)
+			.then((resp) => resp.json())  //turn njson resp
+			.then(function(data){
+				console.log('Data:', data)
+
+				var list = data
+				for (var i in list){
+
+
+					var content = `<span class="content">${list[i].content}</span>`
+				
+         //datarowid each item gets id
+					var item = `
+          <tr id="data-row-${i}">
+            <td class='content'>  ${content}       </td>
+            <td><button class='delete'> <i class="fa fa-remove fa-lg"></i></button></td>
+            <td><button class='edit'> <i class="fa fa-edit fa-lg"></i></a></button></td>
+          </tr>
+					`
+					wrapper.innerHTML += item
+	
+				}
+      
+
+				for (var i in list){
+					var editBtn = document.getElementsByClassName('edit')[i]
+					var deleteBtn = document.getElementsByClassName('delete')[i]
+					var content = document.getElementsByClassName('content')[i]
+
+
+					editBtn.addEventListener('click', (function(item){
+						return function(){
+							editItem(item)
+						}
+					})(list[i]))
+
+
+					deleteBtn.addEventListener('click', (function(item){
+						return function(){
+							deleteItem(item)
+						}
+					})(list[i]))
+	
+				}
+
+
+			})
+		}
+
+    //POST DATA
+		var form = document.getElementById('form')
+		form.addEventListener('submit', function(e){
+			e.preventDefault()
+			var url = 'http://127.0.0.1:8000/task-create/'
+
+			if (activeItem != null){ //if we click edit
+				var url = `http://127.0.0.1:8000/task-update/${activeItem.id}/`
+				activeItem = null
+			}
+
+
+
+			var content = document.getElementById('task_content').value
+			fetch(url, {
+				method:'POST',
+				headers:{
+					'Content-type':'application/json',
+					'X-CSRFToken':csrftoken,
+				},
+				body:JSON.stringify({'content':content}) 
+			}
+			).then(function(response){
+				buildList() //call the buildlist from start
+				document.getElementById('form').reset()
+			})
+		})
+
+
+
+
+		function editItem(item){
+			console.log('Item clicked:', item)
+			activeItem = item
+			document.getElementById('task_content').value = activeItem.content //get the data in form
+		}
+
+
+		function deleteItem(item){
+			console.log('Delete clicked')
+			fetch(`http://127.0.0.1:8000/task-delete/${item.id}/`, {
+				method:'DELETE', 
+				headers:{
+					'Content-type':'application/json',
+					'X-CSRFToken':csrftoken,
+				}
+			}).then((response) => {
+				buildList()
+			})
+		}
+
+		
+    
+
+</script>
+
+</body>
+</html>
